@@ -3,6 +3,7 @@ import {CommonModule} from '@angular/common';
 import {HeaderComponent} from './components/header/header.component';
 import {SharedModule} from "../shared/shared.module";
 import {RouterModule} from "@angular/router";
+import {HttpClientModule} from "@angular/common/http";
 
 
 @NgModule({
@@ -12,7 +13,8 @@ import {RouterModule} from "@angular/router";
   imports: [
     CommonModule,
     RouterModule,
-    SharedModule
+    SharedModule,
+    HttpClientModule
   ],
   exports: [
     HeaderComponent
