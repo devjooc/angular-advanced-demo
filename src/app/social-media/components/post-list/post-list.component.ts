@@ -3,6 +3,7 @@ import {Observable} from "rxjs";
 import {Post} from "../../models/post.model";
 import {ActivatedRoute} from "@angular/router";
 import {map} from "rxjs/operators";
+import {PostsService} from "../../services/posts.service";
 
 @Component({
   selector: 'jooc-post-list',
@@ -13,12 +14,12 @@ export class PostListComponent implements OnInit {
 
   posts$!: Observable<Post[]>;
 
-  constructor(private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute, private postService: PostsService) {
   }
 
   /**
    * this component has a resolver => use ActivatedRoute to get data from it.
-   * data name (here is 'posts') is the param specified for the resolver in the routing module
+   * data key (here is 'posts') is the key specified for the resolver in the routing module
    */
   ngOnInit(): void {
     this.posts$ = this.route.data.pipe(
@@ -27,4 +28,7 @@ export class PostListComponent implements OnInit {
   }
 
 
+  onNewComment(postCommented: { comment: string; postId: number }) {
+    this.postService.addNewComment(postCommented);
+  }
 }

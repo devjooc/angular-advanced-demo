@@ -1,2 +1,2 @@
 <h2>Posts List</h2>
-<jooc-post-list-item *ngFor="let post of posts$ | async" [post]="post"></jooc-post-list-item>
+<jooc-post-list-item *ngFor="let post of posts$ | async" [post]="post" (postCommented)="onNewComment($event)"></jooc-post-list-item>
