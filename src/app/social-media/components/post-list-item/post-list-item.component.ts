@@ -13,6 +13,9 @@ export class PostListItemComponent {
   @Output()
   postCommented = new EventEmitter<{ comment: string, postId: number }>();
 
+  // to test a pipe
+  tempUser = {firstName: 'Angular', lastName: 'user'};
+
   onNewComment(newComment: string) {
     console.log('PostListItemComponent got a new comment: ', newComment);
     this.postCommented.emit({comment: newComment, postId: this.post.id});
