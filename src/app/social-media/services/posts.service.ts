@@ -15,7 +15,7 @@ export class PostsService {
   }
 
   getPosts(): Observable<Post[]> {
-    return this.http.get<Post[]>(`${environment.apiUrl}/posts`);
+    return this.http.get<Post[]>(`${environment.apiUrl}/posts`); // here we use 'environment' variables declared in 'environments' files
   }
 
   addNewComment(postCommented: { comment: string, postId: number }) {
