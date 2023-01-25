@@ -25,6 +25,19 @@ import {animate, state, style, transition, trigger} from "@angular/animations";
     ]),
     transition('active => default', [
       animate('200ms ease-in-out')
+    ]),
+    // void animation (used to add animation for elements that don't exist yet => new added comments)
+    transition('void => *', [
+      style({
+        transform: 'translateX(-100%)',
+        opacity: 0,
+        'background-color': 'red'
+      }),
+      animate('200ms ease-out', style({
+        transform: 'translateX(0)',
+        opacity: 1,
+        'background-color': 'white'
+      }))
     ])
   ])]
 })
@@ -62,6 +75,14 @@ export class CommentsComponent implements OnInit {
     if (this.commentCtrl.invalid) {
       return;
     }
+    // simply add new comment to comments array (no interaction with sever)
+    this.comments.unshift({
+      id: Math.random(),
+      comment: this.commentCtrl.value,
+      createdDate: new Date().toISOString(),
+      userId: 1
+    });
+    // emit event
     this.eventEmitter.emit(this.commentCtrl.value);
     this.commentCtrl.reset();
   }
