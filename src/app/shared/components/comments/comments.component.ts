@@ -1,45 +1,77 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Comment} from "../../../core/models/comment.model";
 import {FormBuilder, FormControl, Validators} from "@angular/forms";
-import {animate, state, style, transition, trigger} from "@angular/animations";
+import {
+  animate,
+  animateChild,
+  group,
+  query,
+  stagger,
+  state,
+  style,
+  transition,
+  trigger, useAnimation
+} from "@angular/animations";
+import {flashAnimation} from "../../animations/flash.animation";
+import {slideAndFadeAnimation} from "../../animations/slide-and-fade.animation";
 
 @Component({
   selector: 'jooc-comments',
   templateUrl: './comments.component.html',
   styleUrls: ['./comments.component.scss'],
   // animations example => trigger is the name to be used in the template => @myFirstAnimation
-  animations: [trigger('myFirstAnimation', [
-    state('default', style({
-      transform: 'scale(1)',
-      'background-color': 'white',
-      'z-index': 1
-    })),
-    state('active', style({
-      transform: 'scale(1.05)',
-      'background-color': 'rgb(242,200,165)',
-      'z-index': 2
-    })),
-    // define transition from one state to another
-    transition('default => active', [
-      animate('200ms ease-in-out')
+  animations: [
+    trigger('list', [ // here we trigger child animation 'myFirstAnimation' of parent 'list'  every 50ms
+      transition(':enter', [
+        query('@myFirstAnimation', [
+          stagger(50, [
+            animateChild()
+          ])
+        ])
+      ])
     ]),
-    transition('active => default', [
-      animate('200ms ease-in-out')
-    ]),
-    // void animation (used to add animation for elements that don't exist yet => new added comments)
-    transition('void => *', [
-      style({
-        transform: 'translateX(-100%)',
-        opacity: 0,
-        'background-color': 'red'
-      }),
-      animate('200ms ease-out', style({
-        transform: 'translateX(0)',
-        opacity: 1,
-        'background-color': 'white'
-      }))
-    ])
-  ])]
+    trigger('myFirstAnimation', [
+      state('default', style({
+        transform: 'scale(1)',
+        'background-color': 'white',
+        'z-index': 1
+      })),
+      state('active', style({
+        transform: 'scale(1.05)',
+        'background-color': 'rgb(242,200,165)',
+        'z-index': 2
+      })),
+      // define transition from one state to another
+      transition('default => active', [
+        animate('200ms ease-in-out')
+      ]),
+      transition('active => default', [
+        animate('200ms ease-in-out')
+      ]),
+      // void animation (used to add animation for elements that don't exist yet => new added comments), another syntax :enter
+      transition('void => *', [
+        query('.comment-text, .comment-date', [ // query is used to select specific elements from the animated item => here: classes
+          style({
+            opacity: 0
+          }),
+        ]),
+        useAnimation(slideAndFadeAnimation, {params: {duration: '200ms'}}),
+        // example to group & sequence
+        group([
+          useAnimation(flashAnimation, {params: {duration: '250ms'}}),
+          query('.comment-text', [
+            animate('200ms', style({
+              opacity: 1
+            }))
+          ]),
+          query('.comment-date', [
+            animate('500ms', style({
+              opacity: 1
+            }))
+          ])
+        ])
+      ])
+    ])]
 })
 export class CommentsComponent implements OnInit {
 
