@@ -6,6 +6,10 @@ const routes: Routes = [
     path: 'social-media',
     loadChildren: () => import('./social-media/social-media.module').then(m => m.SocialMediaModule)
   },
+  {
+    path: 'subscribe',
+    loadChildren: () => import('./subscribe-form/subscribe-form.module').then(m => m.SubscribeFormModule)
+  },
   {path: '**', redirectTo: 'social-media'}
 ];
 

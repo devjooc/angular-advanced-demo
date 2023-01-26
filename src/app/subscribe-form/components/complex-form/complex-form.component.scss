@@ -1,0 +1,59 @@
+mat-form-field {
+  width: 45%;
+
+  &.full-width {
+    width: 80%;
+    margin-left: 10%;
+  }
+}
+
+.form-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.form-card {
+  margin: 0.5rem 0;
+  padding: 1rem;
+  background: rgb(0 51 120 / 50%);
+}
+
+.mat-radio-button ~ .mat-radio-button {
+  margin-left: 16px;
+}
+
+mat-card-actions {
+  text-align: center;
+
+  button {
+    margin: auto;
+  }
+}
+
+.main-form {
+  position: relative;
+  padding: 1em;
+}
+
+.loading {
+  position: absolute;
+  top: -10px;
+  bottom: -10px;
+  left: -10px;
+  right: -10px;
+  height: inherit;
+  z-index: 10;
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.error-text {
+  color: red;
+}
+
+mat-card-subtitle {
+  color: black;
+}

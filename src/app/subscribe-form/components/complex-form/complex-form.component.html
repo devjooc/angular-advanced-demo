@@ -1,0 +1,95 @@
+<mat-card [formGroup]="mainForm" class="main-form">
+  <mat-card-title>Inscription</mat-card-title>
+
+  <!-- personal info group -->
+  <mat-card class="form-card" [formGroup]="personalInfoForm">
+    <mat-card-subtitle>Personal information</mat-card-subtitle>
+    <div class="form-row">
+      <mat-form-field appearance="fill">
+        <mat-label>First name</mat-label>
+        <input type="text" matInput formControlName="firstName">
+        <mat-error>this field is required</mat-error> <!-- show error -->
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Last name</mat-label>
+        <input type="text" matInput formControlName="lastName">
+        <mat-error>this field is required</mat-error>
+      </mat-form-field>
+    </div>
+  </mat-card>
+
+  <!-- contact preference radio -->
+  <mat-card class="form-card">
+    <mat-card-subtitle>How would you like to be contacted ?</mat-card-subtitle>
+    <mat-radio-group [formControl]="contactPreferenceCtrl">
+      <mat-radio-button value="email">e-mail</mat-radio-button>
+      <mat-radio-button value="phone">phone</mat-radio-button>
+    </mat-radio-group>
+  </mat-card>
+
+  <!-- email group -->
+  <mat-card class="form-card" [formGroup]="emailForm" *ngIf="showEmailCtrl$ | async">
+    <mat-card-subtitle>E-mail</mat-card-subtitle>
+    <div class="form-row">
+      <mat-form-field appearance="fill">
+        <mat-label>E-mail</mat-label>
+        <input type="email" matInput formControlName="email"> <!-- alternative => [formControl]="emailCtrl" -->
+        <mat-error>{{ getFormControlErrorText(emailCtrl) }} </mat-error> <!-- show error via calling a function -->
+
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Confirm e-mail</mat-label>
+        <input type="email" matInput formControlName="confirm">  <!-- or [formControl]="confirmEmailCtrl" -->
+        <mat-error>{{ getFormControlErrorText(confirmEmailCtrl) }} </mat-error>
+      </mat-form-field>
+    </div>
+  </mat-card>
+
+  <!-- phone control -->
+  <mat-card class="form-card" *ngIf="showPhoneCtrl$ | async">
+    <mat-card-subtitle>Phone</mat-card-subtitle>
+    <mat-form-field appearance="fill">
+      <mat-label>Phone number</mat-label>
+      <input type="tel" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" matInput [formControl]="phoneCtrl" minlength="10"
+             maxlength="10">  <!-- or formControlName="confirm" -->
+      <mat-error>{{ getFormControlErrorText(phoneCtrl) }} </mat-error>
+    </mat-form-field>
+  </mat-card>
+
+  <!-- login info group -->
+  <mat-card class="form-card" [formGroup]="loginInfoForm">
+    <mat-card-subtitle>Connection information</mat-card-subtitle>
+    <!-- user name -->
+    <mat-form-field appearance="fill">
+      <mat-label>Username</mat-label>
+      <input type="text" matInput formControlName="username">
+      <mat-error>This field is required</mat-error>
+    </mat-form-field>
+
+    <div class="form-row">
+      <!-- password -->
+      <mat-form-field appearance="fill">
+        <mat-label>Password</mat-label>
+        <input type="password" matInput [formControl]="passwordCtrl"> <!-- or formControlName="password" -->
+        <mat-error>This field is required</mat-error>
+      </mat-form-field>
+      <!-- confirm password -->
+      <mat-form-field appearance="fill">
+        <mat-label>Confirm password</mat-label>
+        <input type="password" matInput [formControl]="confirmPasswordCtrl">
+        <!-- or formControlName="confirmPassword" -->
+        <mat-error>This field is required</mat-error>
+      </mat-form-field>
+    </div>
+  </mat-card>
+
+  <!-- submit button -->
+  <mat-card-actions>
+    <button mat-flat-button color="primary" (click)="onSubmitForm()" [disabled]="mainForm.invalid || loading">Sign up
+    </button>
+  </mat-card-actions>
+
+  <!-- spinner -->
+  <mat-spinner *ngIf="loading" color="primary" mode="indeterminate"></mat-spinner>
+
+</mat-card>
