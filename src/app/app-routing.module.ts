@@ -10,6 +10,10 @@ const routes: Routes = [
     path: 'subscribe',
     loadChildren: () => import('./subscribe-form/subscribe-form.module').then(m => m.SubscribeFormModule)
   },
+  {
+    path: 'reactive-state',
+    loadChildren: () => import('./reactive-state/reactive-state.module').then(m => m.ReactiveStateModule)
+  },
   {path: '**', redirectTo: 'social-media'}
 ];
 
