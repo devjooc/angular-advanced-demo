@@ -43,6 +43,8 @@
         <mat-error>{{ getFormControlErrorText(confirmEmailCtrl) }} </mat-error>
       </mat-form-field>
     </div>
+    <!-- error for confirm equal  -->
+    <small class="error-text" *ngIf="showEmailError$ | async">email address is not the same</small>
   </mat-card>
 
   <!-- phone control -->
@@ -81,6 +83,8 @@
         <mat-error>This field is required</mat-error>
       </mat-form-field>
     </div>
+    <!-- error for confirm equal  -->
+    <small class="error-text" *ngIf="showPasswordError$ | async">the passwords are not identical</small>
   </mat-card>
 
   <!-- submit button -->

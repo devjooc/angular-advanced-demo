@@ -3,6 +3,7 @@ import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from "
 import {Observable} from "rxjs";
 import {map, startWith, tap} from "rxjs/operators";
 import {SubscribeService} from "../../services/subscribe.service";
+import {confirmEqualValidator} from "../../validators/confirm-equal.validator";
 
 @Component({
   selector: 'jooc-complex-form',
@@ -30,6 +31,9 @@ export class ComplexFormComponent implements OnInit {
   // spinner flag
   loading = false;
 
+  // to show errors from custom validator => we need observables
+  showEmailError$!: Observable<boolean>;
+  showPasswordError$!: Observable<boolean>;
 
   constructor(private formBuilder: FormBuilder, private subscribeService: SubscribeService) {
   }
@@ -71,6 +75,9 @@ export class ComplexFormComponent implements OnInit {
     this.emailForm = this.formBuilder.group({
       email: this.emailCtrl,
       confirm: this.confirmEmailCtrl
+    }, {
+      validators: [confirmEqualValidator('email', 'confirm')], // add custom validator (need to be called with parentheses () )
+      updateOn: 'blur' // update on blur field to avoid showing error when start typing directly
     });
 
     // phone control
@@ -83,6 +90,9 @@ export class ComplexFormComponent implements OnInit {
       username: ['', Validators.required],
       password: this.passwordCtrl,
       confirmPassword: this.confirmPasswordCtrl
+    }, {
+      validators: [confirmEqualValidator('password', 'confirmPassword')], // add our custom validator
+      updateOn: 'blur'
     })
   }
 
@@ -107,6 +117,22 @@ export class ComplexFormComponent implements OnInit {
         return preference === 'phone';
       }),
       tap(showPhone => this.setPhoneValidators(showPhone))
+    );
+
+    // observables for the custom validator (on statusChange)
+    this.showEmailError$ = this.emailForm.statusChanges.pipe(
+      map(status => status === 'INVALID' &&
+        this.emailCtrl.value &&
+        this.confirmEmailCtrl.value
+      )
+    );
+    // observables for the custom validator (on statusChange)
+    this.showPasswordError$ = this.loginInfoForm.statusChanges.pipe(
+      map(status => status === 'INVALID' &&
+        this.passwordCtrl.value &&
+        this.confirmPasswordCtrl.value &&
+        this.loginInfoForm.hasError('confirmEqual') // to check if errors is coming from custom validator
+      )
     );
   }
 
